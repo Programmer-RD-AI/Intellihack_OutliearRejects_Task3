@@ -2,6 +2,16 @@
 
 This report documents our approach to enhancing Qwen 2.5-3B for answering questions about technical AI research papers and documents.
 
+## Model Access
+
+Due to their large file sizes, the models could not be included directly in this repository. They can be accessed via the following links:
+
+- **Fine-tuned Model**: [Google Drive Link](https://drive.google.com/drive/folders/1-1ntQq51rkWsvrOXY1HA73zlD8mZh8Kj?usp=sharing)
+- **Quantized Model**: [Google Drive Link](https://drive.google.com/drive/folders/1-vSd2iDNG_9hxZ_H79MVPYO9HYKs8nRh?usp=sharing)
+- **Complete Project**: [Google Drive Link](https://drive.google.com/drive/folders/18qAq284GfgvIfAZYQAJiMeMkcELDkEq9?usp=sharing) (includes all code, data, and models as tested)
+
+This report documents our approach to enhancing Qwen 2.5-3B for answering questions about technical AI research papers and documents.
+
 ## Project Overview
 
 We implemented a comprehensive solution to create a specialized QA model for technical AI research domains. Our approach focused on five key components:

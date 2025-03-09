@@ -2,6 +2,14 @@
 
 This project demonstrates a comprehensive approach to fine-tuning the Qwen 2.5-3B model for specialized AI research question-answering. The implementation focuses on creating an efficient domain-specific QA system that can accurately answer questions about technical AI infrastructure concepts, particularly those related to distributed file systems and performance optimization.
 
+## 📥 Model Access
+
+Due to their large file sizes, the trained models are not included in this repository but can be accessed via the following links:
+
+- **Fine-tuned Model**: [Download from Google Drive](https://drive.google.com/drive/folders/1-1ntQq51rkWsvrOXY1HA73zlD8mZh8Kj?usp=sharing)
+- **Quantized Model**: [Download from Google Drive](https://drive.google.com/drive/folders/1-vSd2iDNG_9hxZ_H79MVPYO9HYKs8nRh?usp=sharing)
+- **Complete Project Files**: [Access on Google Drive](https://drive.google.com/drive/folders/18qAq284GfgvIfAZYQAJiMeMkcELDkEq9?usp=sharing) (where the project was run and tested)
+
 ## 📋 Project Overview
 
 The project implements a complete pipeline for:
@@ -55,6 +63,9 @@ cd LLM-Fine-tuning-Challenge-Enhancing-Qwen-2.5-3B-for-AI-Research-QA
 
 # Install dependencies
 uv sync
+
+# Run
+uv run llm_fine_tuning_challenge_enhancing_qwen_2_5_3b_for_ai_research_qa.py
 ```
 
 ## 📊 Results
