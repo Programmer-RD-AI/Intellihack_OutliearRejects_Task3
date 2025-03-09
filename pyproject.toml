@@ -1,0 +1,23 @@
+[project]
+name = "llm-fine-tuning-challenge-enhancing-qwen-2-5-3b-for-ai-research-qa"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "datasets>=3.3.2",
+    "faiss-cpu",
+    "llama-cpp-python",
+    "nltk>=3.9.1",
+    "numpy>=2.2.3",
+    "peft>=0.14.0",
+    "rouge-score",
+    "torch>=2.6.0",
+    "transformers>=4.49.0",
+    "wandb>=0.19.8",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.9.10",
+]
