@@ -14,6 +14,88 @@ We implemented a comprehensive solution to create a specialized QA model for tec
 
 ## Technical Approach
 
+### System Architecture
+
+Below is a comprehensive visualization of our system architecture, showing the interconnections between all components from document processing through evaluation:
+
+```mermaid
+flowchart TD
+    %% Main System Components
+    subgraph "Document Processing Pipeline"
+        A1[Technical Research Papers] --> A2[Document Extraction]
+        A2 --> A3[Context Preservation]
+        A3 --> A4[Semantic Chunking]
+    end
+
+    subgraph "Synthetic QA Generation System"
+        B1[LLM Teacher Model] --> B2[Instruction Templates]
+        B2 --> B3[QA Pair Generation]
+        A4 --> B3
+        B3 --> B4[Training Dataset]
+        B3 --> B5[Validation Dataset]
+        B3 --> B6[Testing Dataset]
+    end
+
+    subgraph "Fine-tuning Pipeline"
+        C1[Qwen 2.5-3B-Instruct] --> C2[QLoRA Adapters]
+        C2 --> C3[Parameter-Efficient Fine-tuning]
+        B4 --> C3
+        C3 --> C4[Fine-tuned Model]
+        C3 -.-> C5[W&B Monitoring]
+    end
+
+    subgraph "Model Quantization Pipeline"
+        D1[Fine-tuned Model Checkpoint] --> D2[Calibration Process]
+        D2 --> D3[4-bit Quantization]
+        D3 --> D4[GGUF Conversion]
+        D4 --> D5[Optimized 4-bit Model]
+    end
+
+    subgraph "RAG System"
+        E1[Document Corpus] --> E2[BAAI/bge-small-en-v1.5 Embeddings]
+        E2 --> E3[FAISS Vector Database]
+        E4[User Query] --> E5[Query Embedding]
+        E5 --> E6[Similarity Search]
+        E3 --> E6
+        E6 --> E7[Top-k Relevant Chunks]
+    end
+
+    subgraph "Inference System"
+        F1[User Question] --> F2[Query Processing]
+        F2 --> F3[Inference Mode Selection]
+        F3 -->|RAG Mode| F4[RAG-Enhanced Inference]
+        F3 -->|Standalone Mode| F5[Direct Model Inference]
+        E7 --> F4
+        D5 --> F4
+        D5 --> F5
+        F4 --> F6[Response Generation]
+        F5 --> F6
+        F6 --> F7[Technical AI Answer]
+    end
+
+    subgraph "Evaluation Framework"
+        G1[Test Questions] --> G2[Multi-Configuration Testing]
+        G2 --> G3[Automatic Metrics]
+        G2 --> G4[Technical Accuracy Assessment]
+        G2 --> G5[Human Expert Evaluation]
+        G3 --> G6[Performance Analytics]
+        G4 --> G6
+        G5 --> G6
+    end
+
+    %% Main Flow Connections
+    C4 --> D1
+    C4 --> F4
+    C4 --> F5
+    F7 --> G1
+
+    %% Styling
+    classDef pipeline fill:#f9f9f9,stroke:#333,stroke-width:1px;
+    class A1,A2,A3,A4,B1,B2,B3,B4,B5,B6,C1,C2,C3,C4,C5,D1,D2,D3,D4,D5,E1,E2,E3,E4,E5,E6,E7,F1,F2,F3,F4,F5,F6,F7,G1,G2,G3,G4,G5,G6 pipeline;
+```
+
+The diagram illustrates the complete workflow from raw document processing to final evaluation. Key data flows are represented by connecting arrows, showing how information moves from document chunks to training data, through the fine-tuning process, and into the inference system. Both standalone and RAG-enhanced inference paths are depicted, along with the comprehensive evaluation framework used to assess model performance.
+
 ### Document Processing
 
 Our document processing pipeline extracts and structures information from technical markdown documents. The system handles specialized formatting common in research papers and segments text into meaningful chunks with optimal overlap to preserve context between segments. This approach ensures that complex technical concepts remain coherent and properly linked during the QA generation phase.
@@ -59,6 +141,63 @@ The RAG system uses the BAAI/bge-small-en-v1.5 embedding model for efficient doc
 ### Quantization Process
 
 The 4-bit quantization process was implemented using llama.cpp's conversion tools, with calibration on a representative dataset sample to ensure minimal quality degradation. The resulting GGUF file is approximately 1.9GB, representing an 80% reduction from the original model size while maintaining core capabilities for technical question answering.
+
+## Evaluation Results
+
+Our evaluation framework assessed model performance using established NLP metrics and comparative analysis of base and fine-tuned models, both with and without RAG enhancement.
+
+### Evaluation Methodology
+
+We evaluated the models using a reserved test set of approximately 250 technical AI research questions not seen during training. Each question was processed through four configurations:
+
+1. Base Qwen 2.5-3B model
+2. Base model with RAG
+3. Fine-tuned model
+4. Fine-tuned model with RAG
+
+This approach allowed us to isolate the impact of both fine-tuning and retrieval augmentation on model performance.
+
+### Metrics and Results
+
+We employed industry-standard metrics to quantify performance improvements:
+
+| Metric  | Base Model | Fine-tuned Model | Improvement |
+| ------- | ---------- | ---------------- | ----------- |
+| BLEU    | 0.053      | 0.162            | +206%       |
+| ROUGE-1 | 0.194      | 0.462            | +138%       |
+| ROUGE-2 | 0.057      | 0.296            | +419%       |
+| ROUGE-L | 0.139      | 0.393            | +183%       |
+
+The results demonstrate substantial improvements across all metrics, with particularly significant gains in ROUGE-2 scores, indicating enhanced coherence and accuracy in capturing multi-word technical concepts and terminology.
+
+### RAG Enhancement Analysis
+
+The addition of retrieval augmentation further improved performance metrics:
+
+- The fine-tuned model with RAG showed a 27% improvement in BLEU scores over the fine-tuned model alone
+- ROUGE-1 scores improved by 18% with RAG integration
+- Technical accuracy assessments revealed that RAG particularly enhanced responses to questions requiring specific numerical details or references to specific research findings
+
+### Error Analysis
+
+Our qualitative analysis identified that the fine-tuned model occasionally struggled with:
+
+1. Highly specialized technical terminology not present in the training data
+2. Complex comparisons between multiple technical approaches
+3. Questions requiring numerical precision
+
+The RAG implementation successfully mitigated these limitations in most cases, demonstrating the complementary nature of fine-tuning and retrieval-based approaches.
+
+### Human Evaluation
+
+In addition to automatic metrics, we conducted a limited human evaluation with domain experts who assessed response quality on dimensions of:
+
+- Technical accuracy
+- Relevance to the question
+- Completeness of information
+- Coherence and clarity
+
+The fine-tuned model with RAG achieved the highest scores across all dimensions, with experts noting particular improvements in the model's ability to provide comprehensive context for technical concepts.
 
 ## Conclusion
 

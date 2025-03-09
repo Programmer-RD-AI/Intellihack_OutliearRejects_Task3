@@ -1,0 +1,73 @@
+flowchart TD
+    %% Main System Components
+    subgraph "Document Processing Pipeline"
+        A1[Technical Research Papers] --> A2[Document Extraction]
+        A2 --> A3[Context Preservation]
+        A3 --> A4[Semantic Chunking]
+    end
+
+    subgraph "Synthetic QA Generation System"
+        B1[LLM Teacher Model] --> B2[Instruction Templates]
+        B2 --> B3[QA Pair Generation]
+        A4 --> B3
+        B3 --> B4[Training Dataset]
+        B3 --> B5[Validation Dataset]
+        B3 --> B6[Testing Dataset]
+    end
+
+    subgraph "Fine-tuning Pipeline"
+        C1[Qwen 2.5-3B-Instruct] --> C2[QLoRA Adapters]
+        C2 --> C3[Parameter-Efficient Fine-tuning]
+        B4 --> C3
+        C3 --> C4[Fine-tuned Model]
+        C3 -.-> C5[W&B Monitoring]
+    end
+
+    subgraph "Model Quantization Pipeline"
+        D1[Fine-tuned Model Checkpoint] --> D2[Calibration Process]
+        D2 --> D3[4-bit Quantization]
+        D3 --> D4[GGUF Conversion]
+        D4 --> D5[Optimized 4-bit Model]
+    end
+
+    subgraph "RAG System"
+        E1[Document Corpus] --> E2[BAAI/bge-small-en-v1.5 Embeddings]
+        E2 --> E3[FAISS Vector Database]
+        E4[User Query] --> E5[Query Embedding]
+        E5 --> E6[Similarity Search]
+        E3 --> E6
+        E6 --> E7[Top-k Relevant Chunks]
+    end
+
+    subgraph "Inference System"
+        F1[User Question] --> F2[Query Processing]
+        F2 --> F3[Inference Mode Selection]
+        F3 -->|RAG Mode| F4[RAG-Enhanced Inference]
+        F3 -->|Standalone Mode| F5[Direct Model Inference]
+        E7 --> F4
+        D5 --> F4
+        D5 --> F5
+        F4 --> F6[Response Generation]
+        F5 --> F6
+        F6 --> F7[Technical AI Answer]
+    end
+
+    subgraph "Evaluation Framework"
+        G1[Test Questions] --> G2[Multi-Configuration Testing]
+        G2 --> G3[Automatic Metrics]
+        G2 --> G4[Technical Accuracy Assessment]
+        G2 --> G5[Human Expert Evaluation]
+        G3 --> G6[Performance Analytics]
+        G4 --> G6
+        G5 --> G6
+    end
+
+    %% Main Flow Connections
+    C4 --> D1
+    C4 --> F4
+    C4 --> F5
+    F7 --> G1
+    
+    %% Styling
+    classDef pipeline fill:#f9f9f9,stroke:#333,stroke-width:1px;
+    class A1,A2,A3,A4,B1,B2,B3,B4,B5,B6,C1,C2,C3,C4,C5,D1,D2,D3,D4,D5,E1,E2,E3,E4,E5,E6,E7,F1,F2,F3,F4,F5,F6,F7,G1,G2,G3,G4,G5,G6 pipeline;
